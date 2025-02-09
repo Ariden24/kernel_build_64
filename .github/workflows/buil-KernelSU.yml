@@ -60,6 +60,7 @@ jobs:
           export PATH=$GITHUB_WORKSPACE/clang/bin:${PATH}
           args="                  ARCH=arm64 \
                                   CC=clang \
+                                  LD=ld.lld \
                                   O=../out \
                                   ${{ env.BUILD_ARGS }} \
                                   CLANG_TRIPLE=aarch64-linux-gnu- \
