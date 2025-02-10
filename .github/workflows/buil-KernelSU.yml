@@ -22,6 +22,7 @@ jobs:
       
       - name: Update environment
         run: |
+          echo "DEVICE=$(echo ${{ env.KERNEL_CONFIG }} | sed 's!vendor/!!;s/_defconfig//;s/_user//;s/-perf//')" >> $GITHUB_ENV
           sudo apt-get update
           sudo apt-get install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python3
           
@@ -46,6 +47,7 @@ jobs:
       - name: Download kernel source
         run: |
           git clone --depth=1 ${{ env.KERNEL_SOURCE }} -b ${{ env.KERNEL_SOURCE_BRANCH }} kernel-source
+          echo "LOCALVERSION=" >> $GITHUB_ENV
 
       - name: Setup KernelSU
         run: |
@@ -88,5 +90,5 @@ jobs:
       - name: Upload kernel to artifact
         uses: actions/upload-artifact@v4
         with:
-          name: output_kernel
+          name: ${{ env.LOCALVERSION }}${{ env.UPLOADNAME }}-${{ env.DEVICE }}
           path: AnyKernel3/*
